@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cabine de Fotos</title>
+</head>
+<body>
+<h1>Cabine de Fotos</h1>
+
+<video id="camera" autoplay playsinline width="320" height="240"></video>
+<button id="takePhoto">Tirar Foto</button>
+
+<canvas id="canvas" width="320" height="240" style="display:none;"></canvas>
+<img id="fotoResult" alt="Sua foto aparecerá aqui" width="320">
+
+<div id="qrCode"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
