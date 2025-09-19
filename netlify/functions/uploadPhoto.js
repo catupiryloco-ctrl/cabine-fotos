@@ -24,33 +24,9 @@ exports.handler = async function(event, context) {
 
     const imgLink = result.data.url;
 
-    // 2️⃣ Criar página HTML de download
-    const htmlPage = `
-      <!DOCTYPE html>
-      <html lang="pt-BR">
-      <head>
-        <meta charset="UTF-8">
-        <title>Sua Foto</title>
-        <style>
-          body { font-family: sans-serif; text-align: center; padding: 50px; }
-          img { max-width: 90%; height: auto; border: 2px solid #333; margin-bottom: 20px; }
-          button { padding: 10px 20px; font-size: 16px; cursor: pointer; }
-        </style>
-      </head>
-      <body>
-        <h1>Sua Foto</h1>
-        <img src="${imgLink}" alt="Sua Foto">
-        <br><br>
-        <a href="${imgLink}" download="${name}.png">
-          <button>Baixar Foto</button>
-        </a>
-      </body>
-      </html>
-    `;
-
-    // 3️⃣ Retornar a página como data URL para QR Code
-    const encodedPage = Buffer.from(htmlPage).toString('base64');
-    const pageURL = `data:text/html;base64,${encodedPage}`;
+    // 2️⃣ Criar página dinâmica via query string
+    // A URL real será o próprio site + query param
+    const pageURL = `https://SEU-SITE.netlify.app/photo.html?img=${encodeURIComponent(imgLink)}&name=${encodeURIComponent(name)}`;
 
     return {
       statusCode: 200,
