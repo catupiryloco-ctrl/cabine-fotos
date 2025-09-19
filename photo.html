@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sua Foto</title>
+<style>
+  body { font-family: sans-serif; text-align: center; padding: 50px; }
+  img { max-width: 90%; height: auto; border: 2px solid #333; margin-bottom: 20px; }
+  button { padding: 10px 20px; font-size: 16px; cursor: pointer; }
+</style>
+</head>
+<body>
+<h1>Sua Foto</h1>
+<img id="foto" src="" alt="Sua Foto">
+<br><br>
+<a id="downloadLink" href="" download>
+  <button>Baixar Foto</button>
+</a>
+
+<script>
+  // Pegar os parâmetros da URL
+  const params = new URLSearchParams(window.location.search);
+  const img = params.get('img');
+  const name = params.get('name') || 'foto';
+
+  if(img){
+    const foto = document.getElementById('foto');
+    const downloadLink = document.getElementById('downloadLink');
+    foto.src = img;
+    downloadLink.href = img;
+    downloadLink.download = name + '.png';
+  } else {
+    document.body.innerHTML = '<h2>Foto não encontrada!</h2>';
+  }
+</script>
+</body>
+</html>
