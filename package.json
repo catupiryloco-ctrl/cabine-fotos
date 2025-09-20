@@ -2,8 +2,6 @@
   "name": "cabine-fotos",
   "version": "1.0.0",
   "dependencies": {
-    "node-fetch": "^2.6.7",
-    "jszip": "^3.10.1",
-    "file-saver": "^2.0.5"
+    "node-fetch": "^2.6.7"
   }
 }
