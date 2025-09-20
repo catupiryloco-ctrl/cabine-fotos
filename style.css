@@ -1,8 +1,10 @@
-body{font-family:sans-serif;text-align:center;padding:10px;}
-#logo{width:120px;margin:10px auto;display:block;}
-video,canvas{width:90%;max-width:400px;border:2px solid #333;border-radius:10px;margin:10px auto;}
-button{padding:10px 20px;margin:5px;font-size:16px;cursor:pointer;}
-#gallery{margin-top:20px;}
-.thumbnail-wrapper{position:relative;display:inline-block;margin:5px;}
-.thumbnail-wrapper img{width:80px;height:auto;border:2px solid #333;border-radius:5px;}
-.download-icon{position:absolute;bottom:2px;right:2px;background:rgba(0,0,0,0.6);color:white;border-radius:50%;padding:3px;font-size:14px;cursor:pointer;}
+body { font-family: sans-serif; text-align: center; padding: 20px; background: #f0f0f0; }
+header { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 20px; }
+.logo { height: 50px; }
+video { max-width: 100%; border: 2px solid #333; border-radius: 10px; }
+button { margin: 10px; padding: 10px 20px; font-size: 16px; cursor: pointer; }
+#photosContainer { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 20px; }
+.photoWrapper { position: relative; }
+.photoWrapper img { width: 150px; height: auto; border: 2px solid #333; border-radius: 5px; }
+.photoWrapper button { position: absolute; top: 5px; right: 5px; background: red; color: white; border: none; border-radius: 50%; cursor: pointer; }
+#qrContainer { margin-top: 20px; }
