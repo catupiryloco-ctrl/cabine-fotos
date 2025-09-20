@@ -1,40 +1,26 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<title>Cabine de Fotos</title>
-<link rel="stylesheet" href="style.css">
-<script src="https://cdn.jsdelivr.net/npm/qrcodejs/qrcode.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cabine de Fotos</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <header>
+    <img src="logo.png" alt="Logo" class="logo">
+    <h1>Cabine de Fotos</h1>
+  </header>
 
-<header>
-  <img src="logo.png" id="logo" alt="Logo">
-  <h1>Cabine de Fotos</h1>
-</header>
+  <main>
+    <video id="video" autoplay playsinline></video>
+    <button id="takePhoto">Tirar Foto</button>
+    <button id="finalizeSession">Finalizar Sessão</button>
+    <div id="photosContainer"></div>
+    <div id="qrContainer"></div>
+  </main>
 
-<section id="camera-section">
-  <video id="video" autoplay></video>
-  <canvas id="canvas" style="display:none;"></canvas>
-</section>
-
-<section id="controls">
-  <button id="singleMode">1 Foto</button>
-  <button id="multiMode">Múltiplas Fotos</button>
-  <button id="snap">Tirar Foto</button>
-  <button id="retake">Refazer Foto</button>
-  <button id="send">Enviar Foto</button>
-  <button id="finishSession">Finalizar Sessão</button>
-</section>
-
-<section id="gallery">
-  <h2>Fotos Capturadas</h2>
-  <div id="thumbnails"></div>
-</section>
-
-<section id="qrcode"></section>
-
-<script src="app.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>
