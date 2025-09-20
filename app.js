@@ -1,57 +1,66 @@
-let sessionPhotos = [];
-const thumbnails = document.getElementById('thumbnails');
-const captureBtn = document.getElementById('capture');
-const finalizeBtn = document.getElementById('finalize');
-const qrCodeContainer = document.getElementById('qrCode');
+const video = document.getElementById('video');
+const takePhotoBtn = document.getElementById('takePhoto');
+const finalizeBtn = document.getElementById('finalizeSession');
+const photosContainer = document.getElementById('photosContainer');
+const qrContainer = document.getElementById('qrContainer');
+
+let photos = [];
+
+// Acessa a webcam
+navigator.mediaDevices.getUserMedia({ video: { width: 1920, height: 1080 } })
+  .then(stream => video.srcObject = stream)
+  .catch(err => console.error("Erro ao acessar a câmera:", err));
 
 // Tirar foto
-captureBtn.onclick = async () => {
-  const video = document.getElementById('video');
+takePhotoBtn.addEventListener('click', () => {
   const canvas = document.createElement('canvas');
-  canvas.width = video.videoWidth;  // mantém resolução máxima da webcam
+  canvas.width = video.videoWidth;
   canvas.height = video.videoHeight;
-  canvas.getContext('2d').drawImage(video, 0, 0);
-  const dataUrl = canvas.toDataURL('image/png');
-  sessionPhotos.push(dataUrl);
-  addThumbnail(dataUrl, sessionPhotos.length - 1);
-};
+  canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+  const dataURL = canvas.toDataURL('image/png');
+  photos.push(dataURL);
+  renderPhotos();
+});
 
-// Adicionar miniatura com X para deletar
-function addThumbnail(base64, index) {
-  const wrapper = document.createElement('div');
-  wrapper.className = 'thumbnail-wrapper';
+// Renderiza fotos capturadas
+function renderPhotos() {
+  photosContainer.innerHTML = '';
+  photos.forEach((photo, index) => {
+    const div = document.createElement('div');
+    div.classList.add('photoWrapper');
 
-  const img = document.createElement('img');
-  img.src = base64;
+    const img = document.createElement('img');
+    img.src = photo;
+    div.appendChild(img);
 
-  const icon = document.createElement('div');
-  icon.className = 'delete-icon';
-  icon.innerHTML = '❌';
-  icon.onclick = () => {
-    sessionPhotos.splice(index, 1);
-    thumbnails.removeChild(wrapper);
-  };
+    const removeBtn = document.createElement('button');
+    removeBtn.textContent = '✖';
+    removeBtn.addEventListener('click', () => {
+      photos.splice(index, 1);
+      renderPhotos();
+    });
+    div.appendChild(removeBtn);
 
-  wrapper.appendChild(img);
-  wrapper.appendChild(icon);
-  thumbnails.appendChild(wrapper);
+    photosContainer.appendChild(div);
+  });
 }
 
-// Finalizar Sessão → criar página e gerar QR Code
-finalizeBtn.onclick = async () => {
-  if (!sessionPhotos.length) return alert('Nenhuma foto selecionada!');
-  qrCodeContainer.innerHTML = 'Gerando QR Code...';
+// Finalizar sessão → envia para createSessionPage.js
+finalizeBtn.addEventListener('click', async () => {
+  if(photos.length === 0) return alert('Tire ao menos uma foto!');
   try {
-    const res = await fetch('/.netlify/functions/createSessionPage', {
+    const response = await fetch('/.netlify/functions/createSessionPage', {
       method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({photos: sessionPhotos})
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ photos })
     });
-    const data = await res.json();
-    qrCodeContainer.innerHTML = '';
-    new QRCode(qrCodeContainer, data.url);  // QR Code aponta para página gerada
-  } catch (e) {
-    console.error(e);
-    qrCodeContainer.innerHTML = 'Erro ao gerar QR Code';
+    const data = await response.json();
+    qrContainer.innerHTML = '';
+    QRCode.toCanvas(data.qrUrl, { width: 200 }, (err, canvas) => {
+      if(err) console.error(err);
+      qrContainer.appendChild(canvas);
+    });
+  } catch (err) {
+    console.error("Erro ao criar sessão:", err);
   }
-};
+});
