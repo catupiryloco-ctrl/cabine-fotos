@@ -5,7 +5,7 @@ exports.handler = async function(event) {
     const body = JSON.parse(event.body);
     const base64Image = body.image.replace(/^data:image\/png;base64,/, '');
     
-    const API_KEY = 'SUA_API_KEY_IMGBB'; // Substitua pela sua chave do Imgbb
+    const API_KEY = '1bb4b4844bd82d98383633c97390016f'; // Substitua pela sua chave do Imgbb
 
     const formData = new URLSearchParams();
     formData.append('image', base64Image);
