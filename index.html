@@ -2,21 +2,40 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Cabine de Fotos</title>
+<link rel="stylesheet" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs/qrcode.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 </head>
 <body>
-<h1>Cabine de Fotos</h1>
 
-<video id="camera" autoplay playsinline width="320" height="240"></video>
-<button id="takePhoto">Tirar Foto</button>
+<header>
+  <img src="logo.png" id="logo" alt="Logo">
+  <h1>Cabine de Fotos</h1>
+</header>
 
-<canvas id="canvas" width="320" height="240" style="display:none;"></canvas>
-<img id="fotoResult" alt="Sua foto aparecerá aqui" width="320">
+<section id="camera-section">
+  <video id="video" autoplay></video>
+  <canvas id="canvas"></canvas>
+</section>
 
-<div id="qrCode"></div>
+<section id="controls">
+  <button id="singleMode">1 Foto</button>
+  <button id="multiMode">Múltiplas Fotos</button>
+  <button id="snap">Tirar Foto</button>
+  <button id="retake">Refazer Foto</button>
+  <button id="send">Enviar Foto</button>
+  <button id="finishSession">Finalizar Sessão</button>
+  <button id="downloadAll">Baixar Todas</button>
+</section>
 
-<script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+<section id="gallery">
+  <h2>Fotos Capturadas</h2>
+  <div id="thumbnails"></div>
+</section>
+
+<section id="qrcode"></section>
+
 <script src="app.js"></script>
 </body>
 </html>
