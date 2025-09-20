@@ -1,54 +1,43 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sua Foto</title>
-<style>
-  body { font-family: sans-serif; text-align: center; padding: 50px; }
-  img { max-width: 90%; height: auto; border: 2px solid #333; margin-bottom: 20px; }
-  button { padding: 10px 20px; font-size: 16px; cursor: pointer; margin-top: 20px; }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Suas Fotos</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<h1>Sua Foto</h1>
-<button id="downloadBtn">Baixar Foto</button>
+  <header>
+    <img src="logo.png" alt="Logo" class="logo">
+    <h1>Suas Fotos</h1>
+  </header>
 
-<script>
-  const params = new URLSearchParams(window.location.search);
-  const img = params.get('img');
-  const name = params.get('name') || 'foto';
+  <main>
+    <div id="photoGallery"></div>
+    <button id="downloadAll">Baixar Todas</button>
+  </main>
 
-  if(img){
-    // Exibe a foto
-    const foto = document.createElement('img');
-    foto.src = img;
-    document.body.insertBefore(foto, document.getElementById('downloadBtn'));
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const photos = urlParams.getAll('img');
+    const gallery = document.getElementById('photoGallery');
 
-    // Baixar direto no celular
-    const downloadBtn = document.getElementById('downloadBtn');
-    downloadBtn.addEventListener('click', async () => {
-      try {
-        const res = await fetch(img);
-        const blob = await res.blob();
-        const url = window.URL.createObjectURL(blob);
-
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = name + '.png';
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-        window.URL.revokeObjectURL(url);
-      } catch(err){
-        alert("Erro ao baixar a foto!");
-        console.error(err);
-      }
+    photos.forEach((url, i) => {
+      const img = document.createElement('img');
+      img.src = url;
+      img.style.width = '80%';
+      img.style.marginBottom = '20px';
+      gallery.appendChild(img);
     });
 
-  } else {
-    document.body.innerHTML = '<h2>Foto não encontrada!</h2>';
-  }
-</script>
+    document.getElementById('downloadAll').addEventListener('click', () => {
+      photos.forEach((url, i) => {
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `foto${i+1}.png`;
+        a.click();
+      });
+    });
+  </script>
 </body>
 </html>
