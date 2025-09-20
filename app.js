@@ -4,10 +4,11 @@ const captureBtn = document.getElementById('capture');
 const finalizeBtn = document.getElementById('finalize');
 const qrCodeContainer = document.getElementById('qrCode');
 
+// Tirar foto
 captureBtn.onclick = async () => {
   const video = document.getElementById('video');
   const canvas = document.createElement('canvas');
-  canvas.width = video.videoWidth;
+  canvas.width = video.videoWidth;  // mantém resolução máxima da webcam
   canvas.height = video.videoHeight;
   canvas.getContext('2d').drawImage(video, 0, 0);
   const dataUrl = canvas.toDataURL('image/png');
@@ -15,6 +16,7 @@ captureBtn.onclick = async () => {
   addThumbnail(dataUrl, sessionPhotos.length - 1);
 };
 
+// Adicionar miniatura com X para deletar
 function addThumbnail(base64, index) {
   const wrapper = document.createElement('div');
   wrapper.className = 'thumbnail-wrapper';
@@ -35,9 +37,10 @@ function addThumbnail(base64, index) {
   thumbnails.appendChild(wrapper);
 }
 
+// Finalizar Sessão → criar página e gerar QR Code
 finalizeBtn.onclick = async () => {
   if (!sessionPhotos.length) return alert('Nenhuma foto selecionada!');
-  qrCodeContainer.innerHTML = 'Gerando...';
+  qrCodeContainer.innerHTML = 'Gerando QR Code...';
   try {
     const res = await fetch('/.netlify/functions/createSessionPage', {
       method: 'POST',
@@ -46,7 +49,7 @@ finalizeBtn.onclick = async () => {
     });
     const data = await res.json();
     qrCodeContainer.innerHTML = '';
-    new QRCode(qrCodeContainer, data.url);
+    new QRCode(qrCodeContainer, data.url);  // QR Code aponta para página gerada
   } catch (e) {
     console.error(e);
     qrCodeContainer.innerHTML = 'Erro ao gerar QR Code';
