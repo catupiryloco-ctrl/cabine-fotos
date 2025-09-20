@@ -1,37 +1,39 @@
 const fetch = require('node-fetch');
 
-exports.handler = async function(event, context) {
+exports.handler = async function(event) {
   try {
-    const { imageBase64, name } = JSON.parse(event.body);
-    const API_KEY = '1bb4b4844bd82d98383633c97390016f'; // sua chave ImgBB
+    const body = JSON.parse(event.body);
+    const base64Image = body.image.replace(/^data:image\/png;base64,/, '');
+    
+    const API_KEY = 'SUA_API_KEY_IMGBB'; // Substitua pela sua chave do Imgbb
 
     const formData = new URLSearchParams();
-    formData.append('image', imageBase64);
-    formData.append('name', name);
-    formData.append('expiration', '604800'); // 7 dias
+    formData.append('image', base64Image);
 
-    const res = await fetch(`https://api.imgbb.com/1/upload?key=${API_KEY}`, {
+    const response = await fetch(`https://api.imgbb.com/1/upload?key=${API_KEY}`, {
       method: 'POST',
       body: formData
     });
 
-    const result = await res.json();
+    const data = await response.json();
 
-    if (!result.success) {
-      return { statusCode: 500, body: JSON.stringify({ success: false, error: result }) };
+    if (!data.success) {
+      return {
+        statusCode: 500,
+        body: JSON.stringify({ error: 'Falha no upload da imagem' })
+      };
     }
-
-    const imgLink = result.data.url;
-
-    // ✅ Aqui usamos a URL real do seu site Netlify
-    const pageURL = `https://aesthetic-klepon-52ff5d.netlify.app/photo.html?img=${encodeURIComponent(imgLink)}&name=${encodeURIComponent(name)}`;
 
     return {
       statusCode: 200,
-      body: JSON.stringify({ success: true, pageURL })
+      body: JSON.stringify({ url: data.data.url })
     };
 
   } catch (err) {
-    return { statusCode: 500, body: JSON.stringify({ success: false, error: err.message }) };
+    console.error(err);
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ error: err.message })
+    };
   }
 };
